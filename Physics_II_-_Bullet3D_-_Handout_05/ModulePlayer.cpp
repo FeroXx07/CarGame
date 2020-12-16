@@ -28,7 +28,7 @@ bool ModulePlayer::Start()
 	car.suspensionStiffness = 5.88f;
 	car.suspensionCompression = 0.83f;
 	car.suspensionDamping = 0.88f;
-	car.maxSuspensionTravelCm = 100.0f;
+	car.maxSuspensionTravelCm =300.0f;
 	car.frictionSlip = 50.5;
 	car.maxSuspensionForce = 6000.0f;
 
@@ -168,6 +168,8 @@ update_status ModulePlayer::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
+		if (vehicle->GetKmh() > 0)
+			//vehicle->ApplyEngineForce(vehicle->GetKmh() * -MAX_ACCELERATION*100000000.0f);
 		vehicle->Jump(JUMP_POWER);
 	}
 

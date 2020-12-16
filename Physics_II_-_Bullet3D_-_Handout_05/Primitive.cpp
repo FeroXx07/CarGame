@@ -4,17 +4,24 @@
 #include <gl/GLU.h>
 #include "Primitive.h"
 #include "glut/glut.h"
+#include "Application.h"
 
 #pragma comment (lib, "glut/glut32.lib")
 
 // ------------------------------------------------------------
-Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
-{}
+Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point), body(nullptr)
+{
+}
 
 // ------------------------------------------------------------
 PrimitiveTypes Primitive::GetType() const
 {
 	return type;
+}
+
+void Primitive::Update()
+{
+	body.GetTransform(&transform);
 }
 
 // ------------------------------------------------------------

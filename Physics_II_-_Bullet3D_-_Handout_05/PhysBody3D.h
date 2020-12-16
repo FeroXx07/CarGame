@@ -6,6 +6,13 @@
 class btRigidBody;
 class Module;
 
+class Sphere;
+class Cube;
+class Cylinder;
+class Plane;
+
+class Primitive;
+
 // =================================================
 struct PhysBody3D
 {
@@ -21,7 +28,7 @@ public:
 
 private:
 	btRigidBody* body = nullptr;
-
+	Primitive* parentPrimitive;
 public:
 	p2List<Module*> collision_listeners;
 };
