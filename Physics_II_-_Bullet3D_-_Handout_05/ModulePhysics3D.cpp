@@ -363,6 +363,19 @@ void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, c
 	hinge->setDbgDrawSize(2.0f);
 }
 
+void ModulePhysics3D::AddConstraintSixDof(btRigidBody& bodyA, btRigidBody& bodyB, const btTransform& transform1, const btTransform& transform2)
+{
+	btGeneric6DofConstraint * free = new btGeneric6DofConstraint(bodyA, bodyB, transform1, transform2, true);
+	for (int i = 0; i < 6; ++i)
+	{
+		free->setLimit(1 + i, 0, 0);
+	}
+	world->addConstraint(free,false);
+	constraints.add(free);
+	free->setDbgDrawSize(2.0f);
+
+}
+
 // =============================================
 void DebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
