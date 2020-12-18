@@ -18,6 +18,7 @@ struct PhysBody3D
 {
 	friend class ModulePhysics3D;
 	friend class ModulePlayer;
+	friend class ModuleSceneIntro;
 public:
 	PhysBody3D(btRigidBody* body);
 	~PhysBody3D();

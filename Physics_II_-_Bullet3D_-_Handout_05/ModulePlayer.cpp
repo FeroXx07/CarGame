@@ -25,7 +25,8 @@ bool ModulePlayer::Start()
 	car.chassis_size.Set(4.5f, 1.75f, 6.5f);
 	car.chassis_offset.Set(0, 1.5, 0);
 	car.mass = 500.0f;
-	car.suspensionStiffness = 5.88f;
+	//car.suspensionStiffness = 5.88f;
+	car.suspensionStiffness = 8.88f;
 	car.suspensionCompression = 0.83f;
 	car.suspensionDamping = 0.88f;
 	car.maxSuspensionTravelCm =300.0f;
@@ -108,15 +109,16 @@ bool ModulePlayer::Start()
 	vehicle = App->physics->AddVehicle(car);
 	vehicle->SetPos(0, 12, 10);
 	
-	Cube* cube = new Cube(2, 2, 2);
-	App->physics->AddBody(*cube, 10)->SetPos(0, 12, 10);
-	App->scene_intro->primitives.PushBack(cube);
+	//Cube* cube = new Cube(2, 2, 2);
+	//App->physics->AddBody(*cube, 10)->SetPos(0, 12, 10);
+	//App->scene_intro->primitives.PushBack(cube);
+	//cube->body.body->setMassProps(0.0001f, { 0,0,0 });
+	//btTransform tr = vehicle->vehicle->getRigidBody()->getWorldTransform();
+	//btVector3 newPos = tr.getOrigin() + btVector3{ 0, 18, 10 };
+	//tr.setOrigin(newPos);
 
-	btTransform pos = vehicle->vehicle->getRigidBody()->getWorldTransform();
-	pos.setOrigin(btVector3({ 0, 18, 10 }));
-
-	btTransform pos2 = cube->body.body->getWorldTransform();
-	App->physics->AddConstraintSixDof(*vehicle->vehicle->getRigidBody(), *cube->body.body,pos,pos2);
+	//btTransform pos2 = cube->body.body->getWorldTransform();
+	//App->physics->AddConstraintSixDof(*vehicle->vehicle->getRigidBody(), *cube->body.body,tr,pos2);
 
 	return true;
 }
