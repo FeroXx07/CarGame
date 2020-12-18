@@ -108,7 +108,7 @@ bool ModulePlayer::Start()
 
 	vehicle = App->physics->AddVehicle(car);
 	vehicle->SetPos(0, 12, 10);
-	
+	vehicle->collision_listeners.add(this);
 	//Cube* cube = new Cube(2, 2, 2);
 	//App->physics->AddBody(*cube, 10)->SetPos(0, 12, 10);
 	//App->scene_intro->primitives.PushBack(cube);
@@ -129,6 +129,18 @@ bool ModulePlayer::CleanUp()
 	LOG("Unloading player");
 
 	return true;
+}
+
+void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
+{
+	if (body1 == vehicle)
+	{
+		// It is player
+		if (body2 == App->physics->ground)
+		{
+			LOG("GROUND!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		}
+	}
 }
 
 // Update: draw background

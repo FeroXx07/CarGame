@@ -63,6 +63,8 @@ bool ModulePhysics3D::Start()
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
 
 		btRigidBody* body = new btRigidBody(rbInfo);
+		ground = new PhysBody3D(body);
+		body->setUserPointer(ground);
 		world->addRigidBody(body);
 	}
 
