@@ -39,6 +39,10 @@ bool ModuleSceneIntro::Start()
 	App->physics->AddBody(*platform1, 0)->SetPos(0, 15, 140);
 	primitives.PushBack(platform1);
 
+	Cube* wall1 = new Cube(15, 15, 2);
+	App->physics->AddBody(*wall1, 0)->SetPos(0, 23, 162);
+	primitives.PushBack(wall1);
+
 	Cube* platform2 = new Cube(30, 2, 15);
 	App->physics->AddBody(*platform2, 0)->SetPos(-22.5f, 15, 152.5f);
 	primitives.PushBack(platform2);
@@ -64,6 +68,48 @@ bool ModuleSceneIntro::Start()
 	Cube* platform4 = new Cube(30, 2, 25);
 	App->physics->AddBody(*platform4, 0)->SetPos(-90.0f, 25, 228.0f);
 	primitives.PushBack(platform4);
+
+	Cube* wall2 = new Cube(2, 40, 30);
+	App->physics->AddBody(*wall2, 0)->SetPos(-49, 50, 270);
+	primitives.PushBack(wall2);
+
+	Cube* wall3 = new Cube(2, 40, 30);
+	App->physics->AddBody(*wall3, 0)->SetPos(-126, 50, 270);
+	primitives.PushBack(wall3);
+
+	Cube* platform5 = new Cube(30, 2, 30);
+	App->physics->AddBody(*platform5, 0)->SetPos(-65, 30, 270);
+	primitives.PushBack(platform5);
+
+	Cube* platform6 = new Cube(30, 2, 30);
+	App->physics->AddBody(*platform6, 0)->SetPos(-110, 37, 270);
+	primitives.PushBack(platform6);
+
+	Cube* platform7 = new Cube(30, 2, 30);
+	App->physics->AddBody(*platform7, 0)->SetPos(-65, 44, 270);
+	primitives.PushBack(platform7);
+
+	Cube* platform8 = new Cube(30, 2, 30);
+	App->physics->AddBody(*platform8, 0)->SetPos(-110, 51, 270);
+	primitives.PushBack(platform8);
+
+	Cube* platform9 = new Cube(30, 2, 30);
+	App->physics->AddBody(*platform9, 0)->SetPos(-65, 58, 270);
+	primitives.PushBack(platform9);
+
+	Cube* ramp3 = new Cube(32, 0.1f, 30);
+	ramp3->SetRotation(21, { 0.0f,0.0f,1.0f });
+	App->physics->AddBody(*ramp3, 0);
+	ramp3->body.SetPos(-65, 64, 270);
+	primitives.PushBack(ramp3);
+
+	Cube* platform10 = new Cube(30, 2, 100);
+	App->physics->AddBody(*platform10, 0)->SetPos(-20, 72, 310);
+	primitives.PushBack(platform10);
+
+	Cube* platform11 = new Cube(30, 2, 100);
+	App->physics->AddBody(*platform11, 0)->SetPos(-20, 73, 310);
+	primitives.PushBack(platform11);
 
 	/*Cube* wall1 = new Cube(15, 15, 1);
 	App->physics->AddBody(*wall1, 100000)->SetPos(0, 5, 115);

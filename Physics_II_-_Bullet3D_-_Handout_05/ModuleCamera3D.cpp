@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
+#include "PhysVehicle3D.h"
+#include "PhysBody3D.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -58,6 +60,14 @@ update_status ModuleCamera3D::Update(float dt)
 
 	Position += newPos;
 	Reference += newPos;
+
+	/*LOG("X: %f, Y: %f. Z: %f", newPos.x, newPos.y, newPos.z);
+
+	if (newPos.x <= -20 && newPos.y <= 72 && newPos.z == 310)
+	{
+		App->player->vehicle->SetTransform(App->player->returnMatrix);
+		App->player->vehicle->SetPos(0, 12, 10);
+	}*/
 
 	// Mouse motion ----------------
 

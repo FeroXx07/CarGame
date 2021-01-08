@@ -107,7 +107,7 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(0, 12, 10);
+	vehicle->SetPos(0, 12,10);
 	vehicle->collision_listeners.add(this);
 	//Cube* cube = new Cube(2, 2, 2);
 	//App->physics->AddBody(*cube, 10)->SetPos(0, 12, 10);
@@ -119,6 +119,9 @@ bool ModulePlayer::Start()
 
 	//btTransform pos2 = cube->body.body->getWorldTransform();
 	//App->physics->AddConstraintSixDof(*vehicle->vehicle->getRigidBody(), *cube->body.body,tr,pos2);
+
+	returnMatrix = new float[16];
+	vehicle->GetTransform(returnMatrix);
 
 	return true;
 }
@@ -146,6 +149,19 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		vehicle->SetTransform(returnMatrix);
+		vehicle->SetPos(-20, 72, 310);
+		vehicle->ApplyEngineForce(0);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		vehicle->SetTransform(returnMatrix);
+		vehicle->SetPos(0, 12, 10);
+	}
+
 	vec3 positionToLook; 
 	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
 	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
@@ -153,7 +169,7 @@ update_status ModulePlayer::Update(float dt)
 
 	vec3 positionToFollow = positionToLook;
 
-	positionToFollow.z -= 17;
+	positionToFollow.z -= 25;
 	positionToFollow.y += 10;
 
 	positionToLook.y += 2;
@@ -163,29 +179,29 @@ update_status ModulePlayer::Update(float dt)
 
 	turn = acceleration = brake = 0.0f;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		acceleration = MAX_ACCELERATION;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
 		acceleration = -MAX_ACCELERATION;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT && acceleration > 0)
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && vehicle->GetKmh() > 0)
 	{
 		brake = BRAKE_POWER;
 	}
