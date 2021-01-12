@@ -53,24 +53,13 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
-
-
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
 	Position += newPos;
 	Reference += newPos;
 
-	/*LOG("X: %f, Y: %f. Z: %f", newPos.x, newPos.y, newPos.z);
-
-	if (newPos.x <= -20 && newPos.y <= 72 && newPos.z == 310)
-	{
-		App->player->vehicle->SetTransform(App->player->returnMatrix);
-		App->player->vehicle->SetPos(0, 12, 10);
-	}*/
-
 	// Mouse motion ----------------
-
 	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
@@ -157,6 +146,12 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
+}
+
+void ModuleCamera3D::ModifyViewMatrix(float matrix[9])
+{
+	mat4x4 modMatrix = {matrix[0], matrix[1], matrix[2], 0.0f, matrix[3], matrix[4], matrix[5], 0.0f, matrix[6], matrix[7], matrix[8], 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	ViewMatrix = (modMatrix * ViewMatrix);
 }
 
 // -----------------------------------------------------------------

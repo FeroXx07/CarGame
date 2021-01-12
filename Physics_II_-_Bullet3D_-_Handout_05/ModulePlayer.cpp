@@ -167,13 +167,12 @@ update_status ModulePlayer::Update(float dt)
 	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
 	positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
 
-	vec3 positionToFollow = positionToLook;
-
-	positionToFollow.z -= 25;
-	positionToFollow.y += 10;
-
 	positionToLook.y += 2;
 	positionToLook.z += 12;
+
+	vec3 positionToFollow = positionToLook;
+	positionToFollow.z -= 25;
+	positionToFollow.y += 10;
 		
 	App->camera->Look(positionToFollow, positionToLook, true);
 
@@ -191,12 +190,15 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
+		App->camera->ModifyViewMatrix(rotationMatrix); //Hacer rotMatrix segun turn
+
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
+		App->camera->ModifyViewMatrix(transRotationMatrix); //Hacer rotMatrix segun turn
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}

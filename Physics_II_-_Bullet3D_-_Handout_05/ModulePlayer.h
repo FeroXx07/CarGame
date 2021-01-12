@@ -29,5 +29,8 @@ public:
 	float lastAcceleration;
 	float brake;
 
+	float rotationMatrix[9] = { 0.9271839f, 0.0000000f, 0.3746066f, 0.0000000f, 1.0000000f, 0.0000000f, -0.3746066f, 0.0000000f, 0.9271839f };
+	float transRotationMatrix[9] = { 0.9271839f, 0.0000000f, -0.3746066f, 0.0000000f, 1.0000000f, 0.0000000f, 0.3746066f, 0.0000000f, 0.9271839f };
+
 	float* returnMatrix;
 };
