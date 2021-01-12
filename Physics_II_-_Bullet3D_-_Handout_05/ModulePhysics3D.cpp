@@ -92,14 +92,14 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 			if(pbodyA && pbodyB)
 			{
 				p2List_item<Module*>* item = pbodyA->collision_listeners.getFirst();
-				while(item)
+				while(item && item->data != nullptr)
 				{
 					item->data->OnCollision(pbodyA, pbodyB);
 					item = item->next;
 				}
 
 				item = pbodyB->collision_listeners.getFirst();
-				while(item)
+				while(item && item->data != nullptr)
 				{
 					item->data->OnCollision(pbodyB, pbodyA);
 					item = item->next;
@@ -332,6 +332,7 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 
 	PhysVehicle3D* pvehicle = new PhysVehicle3D(body, vehicle, info);
 	world->addVehicle(vehicle);
+	body->setUserPointer(pvehicle);
 	vehicles.add(pvehicle);
 
 	return pvehicle;

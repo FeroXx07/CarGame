@@ -107,6 +107,7 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
+	
 	vehicle->SetPos(0, 12,10);
 	vehicle->collision_listeners.add(this);
 	//Cube* cube = new Cube(2, 2, 2);

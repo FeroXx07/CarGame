@@ -154,5 +154,9 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
+	if (body1->is_sensor || body2->is_sensor)
+	{
+		int a = 0;
+	}
 }
 
