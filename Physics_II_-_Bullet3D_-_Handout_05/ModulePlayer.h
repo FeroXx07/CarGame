@@ -21,6 +21,8 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
+
+	void RestartCar();
 public:
 
 	PhysVehicle3D* vehicle;

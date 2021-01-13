@@ -40,7 +40,7 @@ bool ModuleSceneIntro::Start()
 	primitives.PushBack(platform1);
 
 	Cube* wall1 = new Cube(15, 15, 2);
-	App->physics->AddBody(*wall1, 0)->SetPos(0, 23, 162);
+	App->physics->AddBody(*wall1, 0)->SetPos(0, 23, 160);
 	primitives.PushBack(wall1);
 
 	Cube* platform2 = new Cube(30, 2, 15);

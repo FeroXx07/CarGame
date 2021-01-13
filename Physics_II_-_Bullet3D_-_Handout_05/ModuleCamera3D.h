@@ -19,7 +19,7 @@ public:
 	float* GetViewMatrix();
 	void ModifyViewMatrix(float matrix[9]);
 
-private:
+public:
 
 	void CalculateViewMatrix();
 

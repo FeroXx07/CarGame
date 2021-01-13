@@ -110,20 +110,23 @@ bool ModulePlayer::Start()
 	
 	vehicle->SetPos(0, 12,10);
 	vehicle->collision_listeners.add(this);
-	//Cube* cube = new Cube(2, 2, 2);
-	//App->physics->AddBody(*cube, 10)->SetPos(0, 12, 10);
-	//App->scene_intro->primitives.PushBack(cube);
-	//cube->body.body->setMassProps(0.0001f, { 0,0,0 });
-	//btTransform tr = vehicle->vehicle->getRigidBody()->getWorldTransform();
-	//btVector3 newPos = tr.getOrigin() + btVector3{ 0, 18, 10 };
-	//tr.setOrigin(newPos);
-
-	//btTransform pos2 = cube->body.body->getWorldTransform();
-	//App->physics->AddConstraintSixDof(*vehicle->vehicle->getRigidBody(), *cube->body.body,tr,pos2);
 
 	returnMatrix = new float[16];
 	vehicle->GetTransform(returnMatrix);
 
+	//vec3 positionToLook; 
+	//positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
+	//positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
+	//positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
+
+	//positionToLook.y += 2;
+	//positionToLook.z += 12;
+
+	//vec3 positionToFollow = positionToLook;
+	//positionToFollow.z -= 25;
+	//positionToFollow.y += 10;
+	//	
+	//App->camera->Look(positionToFollow, positionToLook, true);
 	return true;
 }
 
@@ -147,6 +150,11 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	}
 }
 
+void ModulePlayer::RestartCar()
+{
+
+}
+
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
@@ -163,6 +171,12 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->SetPos(0, 12, 10);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
+	{
+		//vehicle->SetTransform(initialRotation.M);
+	}
+	
+
 	vec3 positionToLook; 
 	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
 	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
@@ -176,7 +190,24 @@ update_status ModulePlayer::Update(float dt)
 	positionToFollow.y += 10;
 		
 	App->camera->Look(positionToFollow, positionToLook, true);
+	//vec3 positionToFollow;
+	//positionToFollow.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
+	//positionToFollow.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
+	//positionToFollow.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
 
+	///*positionToLook.y += 2;
+	//positionToLook.z += 12;
+
+	//vec3 positionToFollow = positionToLook;
+	//positionToFollow.z -= 25;
+	//positionToFollow.y += 10;*/
+
+	//App->camera->Position.z = positionToFollow.z - 25;
+	//App->camera->Reference.z = positionToFollow.z - 25;
+	//App->camera->CalculateViewMatrix();
+
+	//App->camera->LookAt(positionToFollow);
+	
 	turn = acceleration = brake = 0.0f;
 
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
@@ -192,7 +223,6 @@ update_status ModulePlayer::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		App->camera->ModifyViewMatrix(rotationMatrix); //Hacer rotMatrix segun turn
-
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
