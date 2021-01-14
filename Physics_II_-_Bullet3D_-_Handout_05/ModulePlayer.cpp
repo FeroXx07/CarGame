@@ -4,6 +4,7 @@
 #include "Primitive.h"
 #include "PhysVehicle3D.h"
 #include "PhysBody3D.h"
+#include "ModuleSceneIntro.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled), vehicle(NULL)
 {
@@ -105,28 +106,28 @@ bool ModulePlayer::Start()
 	car.wheels[3].drive = false;
 	car.wheels[3].brake = true;
 	car.wheels[3].steering = false;
-
+	
 	vehicle = App->physics->AddVehicle(car);
 	
 	vehicle->SetPos(0, 12,10);
 	vehicle->collision_listeners.add(this);
-
+	
 	returnMatrix = new float[16];
 	vehicle->GetTransform(returnMatrix);
+	initialRot = vehicle->vehicle->getChassisWorldTransform().getBasis();
+	/*vec3 positionToLook; 
+	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
+	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
+	positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
 
-	//vec3 positionToLook; 
-	//positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
-	//positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
-	//positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
+	positionToLook.y += 2;
+	positionToLook.z += 12;
 
-	//positionToLook.y += 2;
-	//positionToLook.z += 12;
-
-	//vec3 positionToFollow = positionToLook;
-	//positionToFollow.z -= 25;
-	//positionToFollow.y += 10;
-	//	
-	//App->camera->Look(positionToFollow, positionToLook, true);
+	vec3 positionToFollow = positionToLook;
+	positionToFollow.z -= 25;
+	positionToFollow.y += 10;
+		
+	App->camera->Look(positionToFollow, positionToLook, true);*/
 	return true;
 }
 
@@ -147,6 +148,15 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		{
 			LOG("GROUND!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		}
+
+		// It is a platform, wall, etc..
+ 		for (uint n = 0; n < App->scene_intro->primitives.Count(); n++)
+		{
+			if (body2 == &App->scene_intro->primitives[n]->body)
+			{
+				LOG("Plat!!!!!!");
+			}
+		}
 	}
 }
 
@@ -160,6 +170,7 @@ update_status ModulePlayer::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
+		vehicle->vehicle->getRigidBody()->clearForces();
 		vehicle->SetTransform(returnMatrix);
 		vehicle->SetPos(-20, 72, 310);
 		vehicle->ApplyEngineForce(0);
@@ -167,29 +178,33 @@ update_status ModulePlayer::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 	{
+		vehicle->vehicle->getRigidBody()->clearForces();
 		vehicle->SetTransform(returnMatrix);
-		vehicle->SetPos(0, 12, 10);
+		vehicle->SetPos(0, 0, 10);
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
-	{
-		//vehicle->SetTransform(initialRotation.M);
-	}
-	
 
 	vec3 positionToLook; 
 	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
 	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
 	positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
 
-	positionToLook.y += 2;
-	positionToLook.z += 12;
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	{
+		positionToLook.z += -10;
+		positionToLook.y += 10;
+	}
+	else
+	{
+		positionToLook.y += 2;
+		positionToLook.z += 8;
+	}
 
 	vec3 positionToFollow = positionToLook;
 	positionToFollow.z -= 25;
 	positionToFollow.y += 10;
 		
 	App->camera->Look(positionToFollow, positionToLook, true);
+
 	//vec3 positionToFollow;
 	//positionToFollow.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
 	//positionToFollow.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
@@ -202,8 +217,6 @@ update_status ModulePlayer::Update(float dt)
 	//positionToFollow.z -= 25;
 	//positionToFollow.y += 10;*/
 
-	//App->camera->Position.z = positionToFollow.z - 25;
-	//App->camera->Reference.z = positionToFollow.z - 25;
 	//App->camera->CalculateViewMatrix();
 
 	//App->camera->LookAt(positionToFollow);
@@ -222,14 +235,14 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		App->camera->ModifyViewMatrix(rotationMatrix); //Hacer rotMatrix segun turn
+		//App->camera->ModifyViewMatrix(rotationMatrix); //Hacer rotMatrix segun turn
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		App->camera->ModifyViewMatrix(transRotationMatrix); //Hacer rotMatrix segun turn
+		//App->camera->ModifyViewMatrix(transRotationMatrix); //Hacer rotMatrix segun turn
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}

@@ -124,7 +124,11 @@ bool ModuleSceneIntro::Start()
 	App->physics->AddBody(*jumpObstacle, 10000)->SetPos(0, 0, 160);
 	primitives.PushBack(jumpObstacle);*/
 
-	
+	for (uint n = 0; n < primitives.Count(); n++)
+	{
+		primitives[n]->body.collision_listeners.add(App->player);
+	}
+		
 	return ret;
 }
 
