@@ -113,8 +113,12 @@ bool ModulePlayer::Start()
 	vehicle->collision_listeners.add(this);
 	
 	returnMatrix = new float[16];
+	resetMatrix = new float[16];
 	vehicle->GetTransform(returnMatrix);
+	vehicle->GetTransform(resetMatrix);
 	initialRot = vehicle->vehicle->getChassisWorldTransform().getBasis();
+
+
 	/*vec3 positionToLook; 
 	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
 	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
@@ -128,6 +132,7 @@ bool ModulePlayer::Start()
 	positionToFollow.y += 10;
 		
 	App->camera->Look(positionToFollow, positionToLook, true);*/
+
 	return true;
 }
 
@@ -162,7 +167,27 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 void ModulePlayer::RestartCar()
 {
+	float* vehicleTransform = new float[16];
+	btTransform something = vehicle->vehicle->getChassisWorldTransform();
 
+	mat4x4 a = { 1,0, 0, something.getOrigin().getX(), 0,1, 
+		0, something.getOrigin().getY(), 0, 0, 1, something.getOrigin().getZ(),
+		0, 0, 0, 1};
+	
+	/*mat4x4 b = { resetMatrix[0],resetMatrix[1], resetMatrix[2], 0, resetMatrix[4], resetMatrix[5],
+		resetMatrix[6], 0, resetMatrix[8], resetMatrix[9], resetMatrix[10], 0,
+		0, 0, 0, 1 };
+	
+	mat4x4 ab = a * b;*/
+
+	a.transpose();
+
+	for (int i = 0; i < 15; i++) vehicleTransform[i] = a[i];
+
+	vehicle->SetTransform(vehicleTransform);
+
+	for (int i = 0; i < 15; i++) vehicleTransform[i] = NULL;
+	vehicleTransform = nullptr;
 }
 
 // Update: draw background
@@ -183,12 +208,27 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->SetPos(0, 0, 10);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+	{
+		RestartCar();
+	}
+
+	//DEBUG ZONE
+	btTransform something = vehicle->vehicle->getChassisWorldTransform();
+	LOG("X:%f, Y:%f, Z:%f", something.getOrigin().getX(), something.getOrigin().getY(), something.getOrigin().getZ());
+	//DEBUG ZONE
+
 	vec3 positionToLook; 
 	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
 	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
 	positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN)
+	{
+		camFar = !camFar;
+	}
+
+	if (camFar)
 	{
 		positionToLook.z += -10;
 		positionToLook.y += 10;
@@ -271,6 +311,3 @@ update_status ModulePlayer::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
-
-
-

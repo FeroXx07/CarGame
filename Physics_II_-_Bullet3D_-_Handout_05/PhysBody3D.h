@@ -28,6 +28,10 @@ public:
 	void SetTransform(const float* matrix) const;
 	void SetPos(float x, float y, float z);
 	void PhysBody3D::SetAsSensor(bool is_sensor);
+	btRigidBody* GetBody()
+	{
+		return body;
+	}
 private:
 	btRigidBody* body = nullptr;
 	Primitive* parentPrimitive;

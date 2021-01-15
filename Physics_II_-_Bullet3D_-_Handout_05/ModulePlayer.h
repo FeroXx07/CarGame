@@ -35,6 +35,14 @@ public:
 	float transRotationMatrix[9] = { 0.9271839f, 0.0000000f, -0.3746066f, 0.0000000f, 1.0000000f, 0.0000000f, 0.3746066f, 0.0000000f, 0.9271839f };
 
 	float* returnMatrix;
+	float* resetMatrix;
 
 	btMatrix3x3 initialRot = {};
+
+public: //COSMETICS
+	Cube* cosm1 = nullptr;
+
+public: //BOOLS
+
+	bool camFar = false;
 };

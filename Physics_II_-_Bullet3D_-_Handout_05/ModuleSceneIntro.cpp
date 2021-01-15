@@ -103,13 +103,10 @@ bool ModuleSceneIntro::Start()
 	ramp3->body.SetPos(-65, 64, 270);
 	primitives.PushBack(ramp3);
 
-	Cube* platform10 = new Cube(30, 2, 100);
-	App->physics->AddBody(*platform10, 0)->SetPos(-20, 72, 310);
+	Cube* platform10 = new Cube(50, 2, 100);
+	App->physics->AddBody(*platform10, 0)->SetPos(-5, 72, 310);
 	primitives.PushBack(platform10);
 
-	Cube* platform11 = new Cube(30, 2, 100);
-	App->physics->AddBody(*platform11, 0)->SetPos(-20, 73, 310);
-	primitives.PushBack(platform11);
 
 	/*Cube* wall1 = new Cube(15, 15, 1);
 	App->physics->AddBody(*wall1, 100000)->SetPos(0, 5, 115);
