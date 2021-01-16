@@ -129,13 +129,13 @@ update_status ModulePhysics3D::Update(float dt)
 			item = item->next;
 		}
 
-		if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 		{
 			Sphere s(1);
 			s.SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 			float force = 30.0f;
 			AddBody(s)->Push(-(App->camera->Z.x * force), -(App->camera->Z.y * force), -(App->camera->Z.z * force));
-		}
+		}*/
 	}
 
 	return UPDATE_CONTINUE;
@@ -217,7 +217,7 @@ PhysBody3D* ModulePhysics3D::AddBody(Sphere& sphere, float mass)
 	world->addRigidBody(body);
 	bodies.add(pbody);
 
-	sphere.body = *pbody;
+	sphere.body = pbody;
 	return pbody;
 }
 
@@ -246,7 +246,7 @@ PhysBody3D* ModulePhysics3D::AddBody(Cube& cube, float mass)
 	world->addRigidBody(body);
 	bodies.add(pbody);
 
-	cube.body = *pbody;
+	cube.body = pbody;
 	return pbody;
 }
 
@@ -274,7 +274,7 @@ PhysBody3D* ModulePhysics3D::AddBody(Cylinder& cylinder, float mass)
 	world->addRigidBody(body);
 	bodies.add(pbody);
 
-	cylinder.body = *pbody;
+	cylinder.body = pbody;
 	return pbody;
 }
 

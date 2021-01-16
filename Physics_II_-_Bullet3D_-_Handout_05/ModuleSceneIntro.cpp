@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 	Cube * ramp = new Cube(15, 0.1f, 15);
 	ramp->SetRotation(-25, { 1.0f,0.0f,0.0f });
 	App->physics->AddBody(*ramp, 0);
-	ramp->body.SetPos(0, 2, 80);
+	ramp->body->SetPos(0, 2, 80);
 	primitives.PushBack(ramp);
 
 	Cube * platform1 = new Cube(15, 2, 40);
@@ -50,7 +50,7 @@ bool ModuleSceneIntro::Start()
 	Cube* ramp2 = new Cube(15, 0.1f, 15);
 	ramp2->SetRotation(-25, { 0.0f,0.0f,1.0f });
 	App->physics->AddBody(*ramp2, 0);
-	ramp2->body.SetPos(-44.0f, 19, 152.5f);
+	ramp2->body->SetPos(-44.0f, 19, 152.5f);
 	primitives.PushBack(ramp2);
 
 	Cube* platform3 = new Cube(30, 2, 25);
@@ -100,7 +100,7 @@ bool ModuleSceneIntro::Start()
 	Cube* ramp3 = new Cube(32, 0.1f, 30);
 	ramp3->SetRotation(21, { 0.0f,0.0f,1.0f });
 	App->physics->AddBody(*ramp3, 0);
-	ramp3->body.SetPos(-65, 64, 270);
+	ramp3->body->SetPos(-65, 64, 270);
 	primitives.PushBack(ramp3);
 
 	Cube* platform10 = new Cube(50, 2, 100);
@@ -121,9 +121,16 @@ bool ModuleSceneIntro::Start()
 	App->physics->AddBody(*jumpObstacle, 10000)->SetPos(0, 0, 160);
 	primitives.PushBack(jumpObstacle);*/
 
+	/*Sphere *s = new Sphere(10);
+	s->SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	float force = 30.0f;
+	App->physics->AddBody(*s, 1.0f);
+	primitives.PushBack(s);
+	s->body.Push(-(App->camera->Z.x * force), -(App->camera->Z.y * force), -(App->camera->Z.z * force));*/
+
 	for (uint n = 0; n < primitives.Count(); n++)
 	{
-		primitives[n]->body.collision_listeners.add(App->player);
+		primitives[n]->body->collision_listeners.add(App->player);
 	}
 		
 	return ret;
@@ -143,6 +150,16 @@ update_status ModuleSceneIntro::Update(float dt)
 	//Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		Sphere* s = new Sphere(1);
+		s->SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+		float force = 30.0f;
+		App->physics->AddBody(*s, 1.0f);
+		primitives.PushBack(s);
+		s->body->Push(-(App->camera->Z.x * force), -(App->camera->Z.y * force), -(App->camera->Z.z * force));
+	}
 
 	for (uint n = 0; n < primitives.Count(); n++)
 		primitives[n]->Update();

@@ -157,7 +157,7 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		// It is a platform, wall, etc..
  		for (uint n = 0; n < App->scene_intro->primitives.Count(); n++)
 		{
-			if (body2 == &App->scene_intro->primitives[n]->body)
+			if (body2 == App->scene_intro->primitives[n]->body)
 			{
 				LOG("Plat!!!!!!");
 			}
