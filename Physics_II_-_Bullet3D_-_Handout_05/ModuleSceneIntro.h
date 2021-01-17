@@ -3,7 +3,7 @@
 #include "p2DynArray.h"
 #include "Globals.h"
 #include "Primitive.h"
-
+#include "p2List.h"
 #define MAX_SNAKE 2
 
 struct PhysBody3D;
@@ -44,5 +44,8 @@ public:
 
 	Plane p = Plane(0, 1, 0, 0);
 
-	p2DynArray<Primitive*> primitives;
+	Cube* finalSensor = nullptr;
+	Cube* deathSensor = nullptr;
+
+	p2List<Primitive*> primitives;
 };

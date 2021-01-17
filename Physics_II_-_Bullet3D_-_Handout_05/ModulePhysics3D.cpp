@@ -218,6 +218,7 @@ PhysBody3D* ModulePhysics3D::AddBody(Sphere& sphere, float mass)
 	bodies.add(pbody);
 
 	sphere.body = pbody;
+	pbody->parentPrimitive = (Primitive*)&sphere;
 	return pbody;
 }
 
@@ -247,6 +248,7 @@ PhysBody3D* ModulePhysics3D::AddBody(Cube& cube, float mass)
 	bodies.add(pbody);
 
 	cube.body = pbody;
+	pbody->parentPrimitive = (Primitive*)&cube;
 	return pbody;
 }
 
@@ -275,6 +277,7 @@ PhysBody3D* ModulePhysics3D::AddBody(Cylinder& cylinder, float mass)
 	bodies.add(pbody);
 
 	cylinder.body = pbody;
+	pbody->parentPrimitive = (Primitive*)&cylinder;
 	return pbody;
 }
 
@@ -331,6 +334,7 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	// ---------------------
 
 	PhysVehicle3D* pvehicle = new PhysVehicle3D(body, vehicle, info);
+
 	world->addVehicle(vehicle);
 	body->setUserPointer(pvehicle);
 	vehicles.add(pvehicle);

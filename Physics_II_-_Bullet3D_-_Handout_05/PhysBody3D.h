@@ -32,9 +32,10 @@ public:
 	{
 		return body;
 	}
+	Primitive* parentPrimitive;
 private:
 	btRigidBody* body = nullptr;
-	Primitive* parentPrimitive;
+	
 public:
 	p2List<Module*> collision_listeners;
 	bool is_sensor = false;

@@ -22,6 +22,7 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
+	void RestartLevel();
 	void RestartCar();
 public:
 
@@ -45,4 +46,5 @@ public: //COSMETICS
 public: //BOOLS
 
 	bool camFar = false;
+	bool onGround = true;
 };

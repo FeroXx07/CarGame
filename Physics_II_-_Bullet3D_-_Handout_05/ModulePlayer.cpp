@@ -108,7 +108,6 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 	
 	vehicle = App->physics->AddVehicle(car);
-	
 	vehicle->SetPos(0, 12,10);
 	vehicle->collision_listeners.add(this);
 	
@@ -118,20 +117,11 @@ bool ModulePlayer::Start()
 	vehicle->GetTransform(resetMatrix);
 	initialRot = vehicle->vehicle->getChassisWorldTransform().getBasis();
 
-
-	/*vec3 positionToLook; 
-	positionToLook.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
-	positionToLook.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
-	positionToLook.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
-
-	positionToLook.y += 2;
-	positionToLook.z += 12;
-
-	vec3 positionToFollow = positionToLook;
-	positionToFollow.z -= 25;
-	positionToFollow.y += 10;
-		
-	App->camera->Look(positionToFollow, positionToLook, true);*/
+	cosm1 = new Cube(vehicle->info.chassis_size.x * 1.05f, vehicle->info.chassis_size.y * 1.05f, vehicle->info.chassis_size.z * 1.05f);
+	cosm1->SetPos(vehicle->info.chassis_offset.x, vehicle->info.chassis_offset.y, vehicle->info.chassis_offset.z);
+	cosm1->color = { 255,0,0 };
+	vehicle->parentPrimitive = cosm1;
+	vehicle->parentPrimitive->body = vehicle;
 
 	return true;
 }
@@ -155,14 +145,33 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		}
 
 		// It is a platform, wall, etc..
- 		for (uint n = 0; n < App->scene_intro->primitives.Count(); n++)
+		for (uint n = 0; n < App->scene_intro->primitives.count(); n++)
 		{
-			if (body2 == App->scene_intro->primitives[n]->body)
+			Primitive* current;
+			App->scene_intro->primitives.at(n, current);
+			if (body2 == current->body)
 			{
 				LOG("Plat!!!!!!");
 			}
 		}
+
+		if (body2->is_sensor)
+		{
+			if (body2->parentPrimitive == App->scene_intro->finalSensor || body2->parentPrimitive == App->scene_intro->deathSensor)
+			{
+				RestartLevel();
+			}
+		}
 	}
+
+}
+
+void ModulePlayer::RestartLevel()
+{
+	vehicle->vehicle->getRigidBody()->clearForces();
+	vehicle->SetTransform(returnMatrix);
+	vehicle->SetPos(0, 0, 10);
+	vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0,0,0 });
 }
 
 void ModulePlayer::RestartCar()
@@ -170,8 +179,15 @@ void ModulePlayer::RestartCar()
 	float* vehicleTransform = new float[16];
 	btTransform something = vehicle->vehicle->getChassisWorldTransform();
 
-	mat4x4 a = { 1,0, 0, something.getOrigin().getX(), 0,1, 
-		0, something.getOrigin().getY(), 0, 0, 1, something.getOrigin().getZ(),
+	float y1 = something.getBasis().getRow(0).getX();
+	float y2 = something.getBasis().getRow(0).getZ();
+	float y3 = something.getBasis().getRow(2).getX();
+	float y4 = something.getBasis().getRow(2).getZ();
+
+	mat4x4 a = 
+	  { y1, 0, y2, something.getOrigin().getX(), 
+		0, 1, 0, something.getOrigin().getY(), 
+		y3, 0, y4, something.getOrigin().getZ(),
 		0, 0, 0, 1};
 	
 	/*mat4x4 b = { resetMatrix[0],resetMatrix[1], resetMatrix[2], 0, resetMatrix[4], resetMatrix[5],
@@ -193,19 +209,31 @@ void ModulePlayer::RestartCar()
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
+	/*cosm1->Update();
+	vec3 pos;
+	pos.x = vehicle->vehicle->getChassisWorldTransform().getOrigin().x();
+	pos.y = vehicle->vehicle->getChassisWorldTransform().getOrigin().y();
+	pos.z = vehicle->vehicle->getChassisWorldTransform().getOrigin().z();
+	cosm1->SetPos(pos.x, pos.y + 1.6f, pos.z);
+	cosm1->Render();*/
+
+	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT)
+	{
+		vehicle->vehicle->getRigidBody()->applyTorque(btVector3(10000.0, 1, 1));
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		vehicle->vehicle->getRigidBody()->clearForces();
 		vehicle->SetTransform(returnMatrix);
 		vehicle->SetPos(-20, 72, 310);
 		vehicle->ApplyEngineForce(0);
+		vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0,0,0 });
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 	{
-		vehicle->vehicle->getRigidBody()->clearForces();
-		vehicle->SetTransform(returnMatrix);
-		vehicle->SetPos(0, 0, 10);
+		RestartLevel();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
@@ -244,22 +272,6 @@ update_status ModulePlayer::Update(float dt)
 	positionToFollow.y += 10;
 		
 	App->camera->Look(positionToFollow, positionToLook, true);
-
-	//vec3 positionToFollow;
-	//positionToFollow.x = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().x();
-	//positionToFollow.y = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().y();
-	//positionToFollow.z = vehicle->vehicle->getRigidBody()->getWorldTransform().getOrigin().z();
-
-	///*positionToLook.y += 2;
-	//positionToLook.z += 12;
-
-	//vec3 positionToFollow = positionToLook;
-	//positionToFollow.z -= 25;
-	//positionToFollow.y += 10;*/
-
-	//App->camera->CalculateViewMatrix();
-
-	//App->camera->LookAt(positionToFollow);
 	
 	turn = acceleration = brake = 0.0f;
 
@@ -275,14 +287,12 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		//App->camera->ModifyViewMatrix(rotationMatrix); //Hacer rotMatrix segun turn
 		if(turn < TURN_DEGREES)
 			turn +=  TURN_DEGREES;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		//App->camera->ModifyViewMatrix(transRotationMatrix); //Hacer rotMatrix segun turn
 		if(turn > -TURN_DEGREES)
 			turn -= TURN_DEGREES;
 	}
