@@ -131,8 +131,8 @@ bool ModuleSceneIntro::Start()
 	checkPoint->color.Set(255, 0, 0, 0.2f);
 	primitives.add(checkPoint);
 
-	deathSensor = new Cube(300, 1, 600);
-	App->physics->AddBody(*deathSensor, 0)->SetPos(0, 0, 400);
+	deathSensor = new Cube(300, 1, 1000);
+	App->physics->AddBody(*deathSensor, 0)->SetPos(0, 0, 600);
 	deathSensor->body->SetAsSensor(true);
 	deathSensor->color.Set(0, 0, 0, 0.2f);
 	primitives.add(deathSensor);
@@ -148,16 +148,20 @@ bool ModuleSceneIntro::Start()
 	behindWall->color.Set(255, 255, 0, 0.2f);
 	primitives.add(behindWall);
 
-	Cube* leftWall = new Cube(1, 500, 600);
-	App->physics->AddBody(*leftWall, 0)->SetPos(150, 0, 270);
+	Cube* leftWall = new Cube(1, 500, 1000);
+	App->physics->AddBody(*leftWall, 0)->SetPos(150, 0, 470);
 	leftWall->color.Set(255, 255, 0, 0.2f);
 	primitives.add(leftWall);
 
-	Cube* rightWall = new Cube(1, 500, 600);
-	App->physics->AddBody(*rightWall, 0)->SetPos(-150, 0, 270);
+	Cube* rightWall = new Cube(1, 500, 1000);
+	App->physics->AddBody(*rightWall, 0)->SetPos(-150, 0, 470);
 	rightWall->color.Set(255, 255, 0, 0.2f);
 	primitives.add(rightWall);
 
+	Cube* forwardWall = new Cube(300, 500, 1);
+	App->physics->AddBody(*forwardWall, 0)->SetPos(0, 0, 1000);
+	forwardWall->color.Set(255, 255, 0, 0.2f);
+	primitives.add(forwardWall);
 
 	// SECOND PART OF THE CIRCUIT
 	Cube* corridor = new Cube(10, 2, 200);
