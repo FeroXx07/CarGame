@@ -9,6 +9,34 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
+struct MovingBoxX
+{
+	MovingBoxX() {};
+	Cube* cube = nullptr;
+
+	bool goesRight = false;
+
+	void Update();
+
+	float velocity = 10.0f;
+	float maxCounter = 0;
+	float counter = maxCounter;
+};
+
+struct MovingBoxY
+{
+	MovingBoxY() {};
+	Cube* cube = nullptr;
+
+	bool goesDown = false;
+
+	void Update();
+
+	float velocity = 10.0f;
+	float maxCounter = 0;
+	float counter = maxCounter;
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -21,31 +49,19 @@ public:
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
+	void CheckPointLogic();
+
 public:
-	/*
-	PhysBody3D* pb_snake[MAX_SNAKE];
-	Sphere s_snake[MAX_SNAKE];
-
-	PhysBody3D* pb_snake2[MAX_SNAKE];
-	Sphere s_snake2[MAX_SNAKE];
-	*/
-
-	PhysBody3D* pb_chassis;
-	Cube p_chassis;
-
-	PhysBody3D* pb_wheel;
-	Cylinder p_wheel;
-
-	PhysBody3D* pb_wheel2;
-	Cylinder p_wheel2;
-
-	PhysMotor3D* left_wheel;
-	PhysMotor3D* right_wheel;
-
 	Plane p = Plane(0, 1, 0, 0);
 
-	Cube* finalSensor = nullptr;
+	Cube* checkPoint = nullptr;
 	Cube* deathSensor = nullptr;
+	Cube* impulseSensor = nullptr;
+	Cube* winSensor = nullptr;
 
+	bool hasCheckPoint = false;
 	p2List<Primitive*> primitives;
+
+	MovingBoxX movingBoxX[4];
+	MovingBoxY movingBoxY[2];
 };

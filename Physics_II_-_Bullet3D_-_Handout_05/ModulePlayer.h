@@ -24,6 +24,9 @@ public:
 
 	void RestartLevel();
 	void RestartCar();
+	void RestartCheckPoint();
+
+	void DebugKeys();
 public:
 
 	PhysVehicle3D* vehicle;
@@ -47,4 +50,5 @@ public: //BOOLS
 
 	bool camFar = false;
 	bool onGround = true;
+	bool win = false;
 };

@@ -157,9 +157,24 @@ void ModulePlayer::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 		if (body2->is_sensor)
 		{
-			if (body2->parentPrimitive == App->scene_intro->finalSensor || body2->parentPrimitive == App->scene_intro->deathSensor)
+			if (body2->parentPrimitive == App->scene_intro->deathSensor)
 			{
-				RestartLevel();
+				App->scene_intro->CheckPointLogic();
+			}
+
+			if (body2->parentPrimitive == App->scene_intro->checkPoint)
+			{
+				App->scene_intro->hasCheckPoint = true;
+			}
+
+			if (body2->parentPrimitive == App->scene_intro->impulseSensor)
+			{
+				this->vehicle->vehicle->getRigidBody()->applyCentralImpulse({ 0.0f,1000.0f,10000.0f });
+			}
+
+			if (body2->parentPrimitive == App->scene_intro->winSensor)
+			{
+				this->RestartLevel();
 			}
 		}
 	}
@@ -172,6 +187,8 @@ void ModulePlayer::RestartLevel()
 	vehicle->SetTransform(returnMatrix);
 	vehicle->SetPos(0, 0, 10);
 	vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0,0,0 });
+	
+	App->scene_intro->hasCheckPoint = false;
 }
 
 void ModulePlayer::RestartCar()
@@ -206,35 +223,70 @@ void ModulePlayer::RestartCar()
 	vehicleTransform = nullptr;
 }
 
-// Update: draw background
-update_status ModulePlayer::Update(float dt)
+void ModulePlayer::RestartCheckPoint()
 {
-	/*cosm1->Update();
-	vec3 pos;
-	pos.x = vehicle->vehicle->getChassisWorldTransform().getOrigin().x();
-	pos.y = vehicle->vehicle->getChassisWorldTransform().getOrigin().y();
-	pos.z = vehicle->vehicle->getChassisWorldTransform().getOrigin().z();
-	cosm1->SetPos(pos.x, pos.y + 1.6f, pos.z);
-	cosm1->Render();*/
+	vehicle->vehicle->getRigidBody()->clearForces();
+	vehicle->SetTransform(returnMatrix);
+	vehicle->SetPos(-5, 72, 310);
+	vehicle->ApplyEngineForce(0);
+	vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0,0,0 });
+}
 
-	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT)
+void ModulePlayer::DebugKeys()
+{
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 	{
-		vehicle->vehicle->getRigidBody()->applyTorque(btVector3(10000.0, 1, 1));
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-	{
+		// Teleport to checpoint
 		vehicle->vehicle->getRigidBody()->clearForces();
 		vehicle->SetTransform(returnMatrix);
-		vehicle->SetPos(-20, 72, 310);
+		vehicle->SetPos(-5, 73, 710);
 		vehicle->ApplyEngineForce(0);
 		vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0,0,0 });
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
-		RestartLevel();
+		// Teleport to checpoint
+		vehicle->vehicle->getRigidBody()->clearForces();
+		vehicle->SetTransform(returnMatrix);
+		vehicle->SetPos(-5, 72, 310);
+		vehicle->ApplyEngineForce(0);
+		vehicle->vehicle->getRigidBody()->setLinearVelocity({ 0,0,0 });
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		this->RestartLevel();
+	}
+}
+
+// Update: draw background
+update_status ModulePlayer::Update(float dt)
+{
+
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		vehicle->vehicle->getRigidBody()->applyTorque(btVector3(5000.0f, 1, 1));
+	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		vehicle->vehicle->getRigidBody()->applyTorque(btVector3(-5000.0f, 1, 1));
+	}
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
+		vehicle->vehicle->getRigidBody()->applyTorque(btVector3(1, 1, -5000.0f));
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		vehicle->vehicle->getRigidBody()->applyTorque(btVector3(1, 1, 5000.0f));
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		App->scene_intro->CheckPointLogic();
+	}
+
+	DebugKeys();
 
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 	{

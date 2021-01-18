@@ -125,17 +125,45 @@ bool ModuleSceneIntro::Start()
 	platform10->color.Set(0, 100, 255, 0);
 	primitives.add(platform10);
 
-	finalSensor = new Cube(50, 2, 20);
-	App->physics->AddBody(*finalSensor, 0)->SetPos(-5, 73, 350);
-	finalSensor->body->SetAsSensor(true);
-	finalSensor->color.Set(255, 0, 0, 0.2f);
-	primitives.add(finalSensor);
+	checkPoint = new Cube(50, 1, 5);
+	App->physics->AddBody(*checkPoint, 0)->SetPos(-5, 73, 320);
+	checkPoint->body->SetAsSensor(true);
+	checkPoint->color.Set(255, 0, 0, 0.2f);
+	primitives.add(checkPoint);
 
-	deathSensor = new Cube(300, 1, 200);
-	App->physics->AddBody(*deathSensor, 0)->SetPos(0, 1, 200);
+	deathSensor = new Cube(300, 1, 600);
+	App->physics->AddBody(*deathSensor, 0)->SetPos(0, 0, 400);
 	deathSensor->body->SetAsSensor(true);
 	deathSensor->color.Set(0, 0, 0, 0.2f);
 	primitives.add(deathSensor);
+
+	Cube* ground = new Cube(300, 1, 200);
+	App->physics->AddBody(*ground, 0)->SetPos(0, -1, 0);
+	ground->body->SetAsSensor(true);
+	ground->color.Set(255, 255, 255, 0.2f);
+	primitives.add(ground);
+
+	Cube* behindWall = new Cube(300, 500, 1);
+	App->physics->AddBody(*behindWall, 0)->SetPos(0, 0, -30);
+	behindWall->color.Set(255, 255, 0, 0.2f);
+	primitives.add(behindWall);
+
+	Cube* leftWall = new Cube(1, 500, 600);
+	App->physics->AddBody(*leftWall, 0)->SetPos(150, 0, 270);
+	leftWall->color.Set(255, 255, 0, 0.2f);
+	primitives.add(leftWall);
+
+	Cube* rightWall = new Cube(1, 500, 600);
+	App->physics->AddBody(*rightWall, 0)->SetPos(-150, 0, 270);
+	rightWall->color.Set(255, 255, 0, 0.2f);
+	primitives.add(rightWall);
+
+
+	// SECOND PART OF THE CIRCUIT
+	Cube* corridor = new Cube(10, 2, 200);
+	App->physics->AddBody(*corridor, 0)->SetPos(-5, 77, 470);
+	corridor->color.Set(0, 100, 255, 0);
+	primitives.add(corridor);
 
 	for (uint n = 0; n < primitives.count(); n++)
 	{
@@ -143,7 +171,75 @@ bool ModuleSceneIntro::Start()
 		primitives.at(n, current);
 		current->body->collision_listeners.add(App->player);
 	}
-		
+
+	hasCheckPoint = false;
+
+	movingBoxX[0].cube = new Cube(8, 10, 5);
+	App->physics->AddBody(*movingBoxX[0].cube, 10000000.0)->SetPos(-3, 85, 400);
+	movingBoxX[0].cube->body->body->setGravity({ 0,0,0 });
+	movingBoxX[0].cube->color.Set(255, 0, 0, 0);
+	movingBoxX[0].maxCounter = 1.0f;
+	primitives.add(movingBoxX[0].cube);
+
+	movingBoxX[1].cube = new Cube(8, 10, 5);
+	App->physics->AddBody(*movingBoxX[1].cube, 10000000.0)->SetPos(-7, 85, 430);
+	movingBoxX[1].cube->body->body->setGravity({ 0,0,0 });
+	movingBoxX[1].cube->color.Set(255, 0, 0, 0);
+	movingBoxX[1].maxCounter = 1.0f;
+	movingBoxX[1].goesRight = true;
+	primitives.add(movingBoxX[1].cube);
+
+	movingBoxX[2].cube = new Cube(8, 10, 5);
+	App->physics->AddBody(*movingBoxX[2].cube, 10000000.0)->SetPos(-3, 85, 460);
+	movingBoxX[2].cube->body->body->setGravity({ 0,0,0 });
+	movingBoxX[2].cube->color.Set(255, 0, 0, 0);
+	movingBoxX[2].maxCounter = 1.0f;
+	movingBoxX[2].goesRight = false;
+	primitives.add(movingBoxX[2].cube);
+
+	movingBoxX[3].cube = new Cube(8, 10, 5);
+	App->physics->AddBody(*movingBoxX[3].cube, 10000000.0)->SetPos(-7, 85, 490);
+	movingBoxX[3].cube->body->body->setGravity({ 0,0,0 });
+	movingBoxX[3].cube->color.Set(255, 0, 0, 0);
+	movingBoxX[3].maxCounter = 1.0f;
+	movingBoxX[3].goesRight = true;
+	primitives.add(movingBoxX[3].cube);
+
+	movingBoxY[0].cube = new Cube(15, 2, 20);
+	App->physics->AddBody(*movingBoxY[0].cube, 10000000.0)->SetPos(-5, 83, 600);
+	movingBoxY[0].cube->body->body->setGravity({ 0,0,0 });
+	movingBoxY[0].cube->color.Set(0, 100, 255, 0);
+	movingBoxY[0].maxCounter = 2.0f;
+	movingBoxY[0].velocity = 8.0f;
+	movingBoxY[0].goesDown = true;
+	primitives.add(movingBoxY[0].cube);
+
+	movingBoxY[1].cube = new Cube(15, 2, 20);
+	App->physics->AddBody(*movingBoxY[1].cube, 10000000.0)->SetPos(-5, 75, 625);
+	movingBoxY[1].cube->body->body->setGravity({ 0,0,0 });
+	movingBoxY[1].cube->color.Set(0, 100, 255, 0);
+	movingBoxY[1].maxCounter = 2.0f;
+	movingBoxY[1].velocity = 8.0f;
+	movingBoxY[1].goesDown = false;
+	primitives.add(movingBoxY[1].cube);
+
+	Cube* finalPlatform = new Cube(50, 2, 100);
+	App->physics->AddBody(*finalPlatform, 0)->SetPos(-5, 72, 700);
+	finalPlatform->color.Set(0, 100, 255, 0);
+	primitives.add(finalPlatform);
+
+	impulseSensor = new Cube(50, 3, 5);
+	App->physics->AddBody(*impulseSensor, 0)->SetPos(-5, 73, 740);
+	impulseSensor->body->SetAsSensor(true);
+	impulseSensor->color.Set(0, 255, 0, 0.2f);
+	primitives.add(impulseSensor);
+
+	winSensor = new Cube(50, 25, 5);
+	App->physics->AddBody(*winSensor, 0)->SetPos(-5, 70, 900);
+	winSensor->body->SetAsSensor(true);
+	winSensor->color.Set(255, 0, 0, 0.2f);
+	primitives.add(winSensor);
+
 	return ret;
 }
 
@@ -161,6 +257,13 @@ update_status ModuleSceneIntro::Update(float dt)
 	//Plane p(0, 1, 0, 0);
 	p.axis = true;
 	p.Render();
+	p.color.Set(255, 255, 255, 0);
+
+	for (int i = 0; i < 4; ++i)
+		movingBoxX[i].Update();
+
+	for (int i = 0; i < 2; ++i)
+		movingBoxY[i].Update();
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -191,3 +294,51 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	}
 }
 
+void ModuleSceneIntro::CheckPointLogic()
+{
+	if (hasCheckPoint)
+	{
+		App->player->RestartCheckPoint();
+	}
+	else
+	{
+		App->player->RestartLevel();
+	}
+}
+
+void MovingBoxX::Update()
+{
+	counter += -1.0f / 60.f;
+
+	if (counter <= 0.0f)
+	{
+		counter = maxCounter;
+
+		goesRight = !goesRight;
+
+		if (goesRight)
+			cube->body->GetBody()->setLinearVelocity({ velocity, 0.0f, 0.0f });
+		else
+			cube->body->GetBody()->setLinearVelocity({ -velocity, 0.0f, 0.0f });
+	}
+
+	/*btVector3 pos = body->GetBody()->getWorldTransform().getOrigin();
+	body->SetPos(pos.x() + 1.0f, pos.y(), pos.z());*/
+}
+
+void MovingBoxY::Update()
+{
+	counter += -1.0f / 60.f;
+
+	if (counter <= 0.0f)
+	{
+		counter = maxCounter;
+
+		goesDown = !goesDown;
+
+		if (goesDown)
+			cube->body->GetBody()->setLinearVelocity({ 0.0f, velocity, 0.0f });
+		else
+			cube->body->GetBody()->setLinearVelocity({ 0.0f, -velocity, 0.0f });
+	}
+}
