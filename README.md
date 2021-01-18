@@ -12,6 +12,12 @@ A car game made for the subject of video Physics II of the grade of development 
 
  - "Space" to jump.
  
+ - "UP" to rotate forwards
+ - "DOWN" to rotate backwards
+ - "LEFT" to rotate left
+ - "RIGHT" to rotate right
+ 
+## DEBUG KEYS:
  - "F1" toggle debug draw
  - "F2" to restart level
  - "F3" to go to the checkpoint
