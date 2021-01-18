@@ -21,6 +21,7 @@ A car game made for the subject of video Physics II of the grade of development 
 https://github.com/FeroXx07/CarGame/tree/main/Physics_II_-_Bullet3D_-_Handout_05
 
 ## Download the game
+https://github.com/FeroXx07/CarGame/releases/tag/Final
 
 ## Developers
 
