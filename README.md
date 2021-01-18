@@ -5,23 +5,31 @@ A car game made for the subject of video Physics II of the grade of development 
 
 ## Controls
 
- - "W" to accelerate
- - "S" to break & accelerate backwards
- - "D" to steer right
- - "A" to steer left
+ - "W" to accelerate.
+ - "S" to break & accelerate backwards.
+ - "D" to steer right.
+ - "A" to steer left.
 
+ - "Shift" to toggle camera distance.
  - "Space" to jump.
  
- - "UP" to rotate forwards
- - "DOWN" to rotate backwards
- - "LEFT" to rotate left
- - "RIGHT" to rotate right
+ - "Q" to reset rotation to default.
+ - "R" to restart from the current checkpoint.
+ 
+ - "UP" to rotate forwards.
+ - "DOWN" to rotate backwards.
+ - "LEFT" to rotate left.
+ - "RIGHT" to rotate right.
  
 ## DEBUG KEYS:
  - "F1" toggle debug draw
  - "F2" to restart level
  - "F3" to go to the checkpoint
  - "F4" to go to the end of the circuit
+ 
+## Extra information:
+- "Red" is for checkpoint and win.
+- "Green" is to boost.
 
 ## Source Code
 https://github.com/FeroXx07/CarGame/tree/main/Physics_II_-_Bullet3D_-_Handout_05
